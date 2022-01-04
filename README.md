@@ -12,6 +12,10 @@
 > open http://localhost:9001
 ```
 
+### Sign In
+
+See: `/env/minio.env`
+
 ### Create Litestream Bucket
 
 Bucket name: `litestream`
