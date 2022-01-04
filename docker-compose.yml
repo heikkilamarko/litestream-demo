@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  api:
+    build: ./api
+    image: api
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./env/minio.env
+      - ./env/api.env
+    networks:
+      - api
+    depends_on:
+      - minio
+
+  minio:
+    image: minio/minio
+    command: server /data --console-address ":9001"
+    ports:
+      - "9001:9001"
+    env_file:
+      - ./env/minio.env
+    volumes:
+      - minio:/data
+    networks:
+      - api
+
+networks:
+  api:
+
+volumes:
+  minio:

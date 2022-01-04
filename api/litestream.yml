@@ -1,0 +1,11 @@
+exec: "api"
+
+dbs:
+  - path: ${APP_DB_CONNECTION_STRING}
+    replicas:
+      - type: s3
+        bucket: litestream
+        path: items.db
+        endpoint: http://minio:9000
+        access-key-id: "${MINIO_ROOT_USER}"
+        secret-access-key: "${MINIO_ROOT_PASSWORD}"
