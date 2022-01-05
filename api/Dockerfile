@@ -15,7 +15,7 @@ RUN go build -ldflags '-s -w -extldflags "-static"' -tags osusergo,netgo,sqlite_
 ADD https://github.com/benbjohnson/litestream/releases/download/v0.3.7/litestream-v0.3.7-linux-amd64-static.tar.gz /tmp/litestream.tar.gz
 RUN tar -C /usr/local/bin -xzf /tmp/litestream.tar.gz
 
-FROM alpine
+FROM busybox
 
 COPY --from=build /usr/local/bin/litestream /usr/local/bin/
 COPY --from=build /usr/local/bin/api /usr/local/bin/
