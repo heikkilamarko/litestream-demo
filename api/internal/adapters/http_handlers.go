@@ -47,7 +47,7 @@ func (h *HTTPHandlers) CreateItem(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := h.app.Commands.CreateItem.Handle(r.Context(), c.Item); err != nil {
+	if err := h.app.Commands.CreateItem.Handle(r.Context(), c); err != nil {
 		h.logError(err)
 		goutils.WriteInternalError(w, nil)
 		return

@@ -18,6 +18,6 @@ func NewCreateItemHandler(r ports.ItemRepository) *CreateItemHandler {
 	return &CreateItemHandler{r}
 }
 
-func (h *CreateItemHandler) Handle(ctx context.Context, item *domain.Item) error {
-	return h.r.CreateItem(ctx, item)
+func (h *CreateItemHandler) Handle(ctx context.Context, c *CreateItem) error {
+	return h.r.CreateItem(ctx, c.Item)
 }
