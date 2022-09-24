@@ -3,13 +3,13 @@
 ## 1. Start Services
 
 ```bash
-> docker compose up --build -d
+docker compose up --build -d
 ```
 
 ## 2. Navigate to MinIO Console
 
 ```bash
-> open http://localhost:9001
+open http://localhost:9001
 ```
 
 ### Sign In
@@ -38,7 +38,7 @@ Comment out the SQLite database `COPY` instruction in `/api/Dockerfile`
 ### Build and Restart the API Service
 
 ```bash
-> docker compose up --build -d
+docker compose up --build -d
 ```
 
 ### Query Items
