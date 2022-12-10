@@ -13,9 +13,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/gorilla/mux"
-	"github.com/heikkilamarko/goutils"
-	"github.com/heikkilamarko/goutils/middleware"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"github.com/rs/zerolog"
 
 	// SQLite driver
@@ -124,20 +123,16 @@ func (s *Service) initApplication() {
 }
 
 func (s *Service) initHTTPServer(ctx context.Context) {
-	router := mux.NewRouter()
+	router := chi.NewRouter()
 
-	router.Use(
-		middleware.Logger(s.logger),
-		middleware.RequestLogger(),
-		middleware.ErrorRecovery(),
-	)
-
-	router.NotFoundHandler = goutils.NotFoundHandler()
+	router.Use(middleware.Recoverer)
 
 	handlers := adapters.NewHTTPHandlers(s.app, s.logger)
 
-	router.HandleFunc("/items", handlers.GetItems).Methods(http.MethodGet)
-	router.HandleFunc("/items", handlers.CreateItem).Methods(http.MethodPost)
+	router.MethodFunc(http.MethodGet, "/items", handlers.GetItems)
+	router.MethodFunc(http.MethodPost, "/items", handlers.CreateItem)
+
+	router.NotFound(adapters.NotFound)
 
 	s.server = &http.Server{
 		ReadTimeout:  5 * time.Second,
