@@ -15,7 +15,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/rs/zerolog"
+	"golang.org/x/exp/slog"
 
 	// SQLite driver
 	_ "github.com/mattn/go-sqlite3"
@@ -30,7 +30,7 @@ type config struct {
 
 type Service struct {
 	config *config
-	logger *zerolog.Logger
+	logger *slog.Logger
 	db     *sql.DB
 	app    *application.Application
 	server *http.Server
@@ -43,20 +43,22 @@ func (s *Service) Run() {
 	s.loadConfig()
 	s.initLogger()
 
-	s.logInfo("application is starting up...")
+	s.logger.Info("application is starting up...")
 
 	if err := s.initDB(ctx); err != nil {
-		s.logFatal(err)
+		s.logger.Error(err.Error())
+		os.Exit(1)
 	}
 
 	s.initApplication()
 	s.initHTTPServer(ctx)
 
 	if err := s.serve(ctx); err != nil {
-		s.logFatal(err)
+		s.logger.Error(err.Error())
+		os.Exit(1)
 	}
 
-	s.logInfo("application is shut down")
+	s.logger.Info("application is shut down")
 }
 
 func (s *Service) loadConfig() {
@@ -69,20 +71,24 @@ func (s *Service) loadConfig() {
 }
 
 func (s *Service) initLogger() {
-	level, err := zerolog.ParseLevel(s.config.LogLevel)
-	if err != nil {
-		level = zerolog.WarnLevel
+	level := slog.LevelInfo
+
+	level.UnmarshalText([]byte(s.config.LogLevel))
+
+	opts := &slog.HandlerOptions{
+		Level: level,
 	}
 
-	zerolog.SetGlobalLevel(level)
+	handler := slog.NewJSONHandler(os.Stderr, opts).
+		WithAttrs([]slog.Attr{
+			slog.String("app", s.config.App),
+		})
 
-	logger := zerolog.New(os.Stderr).
-		With().
-		Timestamp().
-		Str("app", s.config.App).
-		Logger()
+	logger := slog.New(handler)
 
-	s.logger = &logger
+	slog.SetDefault(logger)
+
+	s.logger = logger
 }
 
 func (s *Service) initDB(ctx context.Context) error {
@@ -149,7 +155,7 @@ func (s *Service) serve(ctx context.Context) error {
 	go func() {
 		<-ctx.Done()
 
-		s.logInfo("application is shutting down...")
+		s.logger.Info("application is shutting down...")
 
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
@@ -160,7 +166,7 @@ func (s *Service) serve(ctx context.Context) error {
 		errChan <- nil
 	}()
 
-	s.logInfo("application is running at %s", s.server.Addr)
+	s.logger.Info("application is running at " + s.server.Addr)
 
 	if err := s.server.ListenAndServe(); err != http.ErrServerClosed {
 		return err
