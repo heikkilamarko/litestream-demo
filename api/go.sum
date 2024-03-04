@@ -4,5 +4,3 @@ github.com/heikkilamarko/goutils v1.0.28 h1:WvUaX5Ab6f1kPduHSQN9Sizl+QElkw0cjuf3
 github.com/heikkilamarko/goutils v1.0.28/go.mod h1:NgSCDSS+A1MVlXMnPrW3PyVdMUqBnen+JKe2CHcOZmA=
 github.com/mattn/go-sqlite3 v1.14.22 h1:2gZY6PC6kBnID23Tichd1K+Z0oS6nE/XwU+Vz/5o4kU=
 github.com/mattn/go-sqlite3 v1.14.22/go.mod h1:Uh1q+B4BYcTPb+yiD3kU8Ct7aC0hY9fxUwlHK0RXw+Y=
-golang.org/x/exp v0.0.0-20240222234643-814bf88cf225 h1:LfspQV/FYTatPTr/3HzIcmiUFH7PGP+OQ6mgDYo3yuQ=
-golang.org/x/exp v0.0.0-20240222234643-814bf88cf225/go.mod h1:CxmFvTBINI24O/j8iY7H1xHzx2i4OsyguNBmN/uPtqc=

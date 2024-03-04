@@ -7,6 +7,7 @@ import (
 	"api/internal/application/query"
 	"context"
 	"database/sql"
+	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
@@ -15,7 +16,6 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"golang.org/x/exp/slog"
 
 	// SQLite driver
 	_ "github.com/mattn/go-sqlite3"

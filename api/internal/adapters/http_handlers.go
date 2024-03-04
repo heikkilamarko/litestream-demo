@@ -5,10 +5,10 @@ import (
 	"api/internal/application/command"
 	"api/internal/domain"
 	"encoding/json"
+	"log/slog"
 	"net/http"
 
 	"github.com/heikkilamarko/goutils"
-	"golang.org/x/exp/slog"
 )
 
 const (
