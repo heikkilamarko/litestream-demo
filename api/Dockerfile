@@ -1,11 +1,9 @@
-FROM golang:1.23-rc AS build
+FROM golang:1.24 AS build
 
 COPY . .
 
 ENV GOPATH=""
 ENV CGO_ENABLED=1
-ENV GOOS=linux
-ENV GOARCH=amd64
 
 # Statically compiling Go programs:
 # https://www.arp242.net/static-go.html
